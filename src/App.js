@@ -16,13 +16,30 @@ export default class SimpleMapPage extends Component {
     greatPlaceCoords: {lat: 59.724465, lng: 30.080121}
   }
 
+  // onClick({x, y, lat, lng, event}) {
+  // }
+
+  onChange({center, zoom, bounds, ...other}) {
+    console.log(center, bounds)
+  }
+
+  // distanceToMouse(data) {
+  // }
+
+  // Make sure the container element has width and height.
+  // The map will try to fill the parent container,
+  // but if the container has no size, the map will collapse to 0 width / height.
   render() {
     return (
       <div className={`container`}>
-         <GoogleMap
+        <GoogleMap
           bootstrapURLKeys={URL_KEYS}
           defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}>
+          defaultZoom={this.props.zoom}
+          onChange={this.onChange.bind(this)}
+          // distanceToMouse={this.distanceToMouse.bind(this)}
+        >
+
           <MyGreatPlace lat={59.955413} lng={30.337844} text={'A'} /* Kreyser Avrora */ />
           <MyGreatPlace {...this.props.greatPlaceCoords} text={'B'} /* road circle */ />
         </GoogleMap>
