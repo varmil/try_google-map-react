@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { AppBar, Paper } from 'material-ui';
 
 import './App.css'
+import markers from './stub/markers'
 import env  from './.env'
 import GoogleMap from 'google-map-react'
 import MyGreatPlace from './components/my_great_place'
@@ -14,42 +15,31 @@ const URL_KEYS = {
 const MAP_OPTIONS = {
   panControl: false,
   mapTypeControl: false,
-  scrollwheel: false,
+  scrollwheel: true,
+  zoomControl: false,
 }
-
-const MARKERS = [
-  {
-    id: 1,
-    text: 'AA',
-    lat: 59.955413,
-    lng: 30.337844,
-  },
-  {
-    id: 2,
-    text: 'BB',
-    lat: 59.724465,
-    lng: 30.080121,
-  }
-]
 
 const style = {
   position: 'fixed',
   left: '15%',
   bottom: 15,
-  height: 70,
+  height: 55,
   width: '70%',
 };
 
+const centerLat = markers.minLat + ((markers.maxLat - markers.minLat) / 2)
+const centerLng = markers.minLng + ((markers.maxLng - markers.minLng) / 2)
+
 export default class SimpleMapPage extends Component {
   static defaultProps = {
-    center: {lat: 59.938043, lng: 30.337157},
-    zoom: 9,
+    center: { lat: centerLat, lng: centerLng },
+    zoom: 16,
     greatPlaceCoords: {lat: null, lng: null }
   }
 
   constructor(props) {
     super(props);
-    this.state = { tappedId: undefined }
+    this.state = { popInfo: undefined }
   }
 
   // onClick({x, y, lat, lng, event}) {
@@ -61,7 +51,7 @@ export default class SimpleMapPage extends Component {
 
   onTapMarker(id) {
     console.log('TAPTAP: ', id)
-    this.setState({ tappedId: id })
+    this.setState({ popInfo: markers.Markers[id].content })
   }
 
   // Make sure the container element has width and height.
@@ -83,14 +73,14 @@ export default class SimpleMapPage extends Component {
             onChange={this.onChange.bind(this)}
           >
 
-          {MARKERS.map(marker =>
-            <MyGreatPlace key={marker.id} onTouchTap={() => this.onTapMarker(marker.id)} lat={marker.lat} lng={marker.lng} text={marker.text} />
+          {markers.Markers.map((marker, index) =>
+            <MyGreatPlace key={index} onTouchTap={() => this.onTapMarker(index)} lat={marker.lat} lng={marker.lng} text={index.toString()} />
           )}
           </GoogleMap>
         </div>
 
         <Paper style={style} zDepth={0}>
-          {this.state.tappedId}
+          <div dangerouslySetInnerHTML={{__html: this.state.popInfo}} />
         </Paper>
       </div>
     )

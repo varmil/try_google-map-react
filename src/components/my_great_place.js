@@ -1,7 +1,8 @@
 import React, {PropTypes, Component} from 'react'
+import './my_great_place.css'
 
-const K_WIDTH = 40;
-const K_HEIGHT = 40;
+const K_WIDTH = 20;
+const K_HEIGHT = 20;
 
 const greatPlaceStyle = {
   // initially any map object has left top corner at lat lng coordinates
@@ -30,7 +31,7 @@ export default class MyGreatPlace extends Component {
   render() {
     return (
        <div onTouchTap={this.props.onTouchTap} style={greatPlaceStyle}>
-          {this.props.text}
+        {this.props.text}
        </div>
     )
   }
