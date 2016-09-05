@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
+import { AppBar, Paper } from 'material-ui';
 
 import './App.css'
 import env  from './.env'
 import GoogleMap from 'google-map-react'
 import MyGreatPlace from './components/my_great_place'
 
+
 const URL_KEYS = {
   key: env.GMAP_API_KEY
+}
+
+const MAP_OPTIONS = {
+  panControl: false,
+  mapTypeControl: false,
+  scrollwheel: false,
 }
 
 const MARKERS = [
@@ -24,11 +32,24 @@ const MARKERS = [
   }
 ]
 
+const style = {
+  position: 'fixed',
+  left: '15%',
+  bottom: 15,
+  height: 70,
+  width: '70%',
+};
+
 export default class SimpleMapPage extends Component {
   static defaultProps = {
     center: {lat: 59.938043, lng: 30.337157},
     zoom: 9,
     greatPlaceCoords: {lat: null, lng: null }
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = { tappedId: undefined }
   }
 
   // onClick({x, y, lat, lng, event}) {
@@ -40,6 +61,7 @@ export default class SimpleMapPage extends Component {
 
   onTapMarker(id) {
     console.log('TAPTAP: ', id)
+    this.setState({ tappedId: id })
   }
 
   // Make sure the container element has width and height.
@@ -47,19 +69,29 @@ export default class SimpleMapPage extends Component {
   // but if the container has no size, the map will collapse to 0 width / height.
   render() {
     return (
-      <div className={`container`}>
-        <GoogleMap
-          bootstrapURLKeys={URL_KEYS}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-          onChange={this.onChange.bind(this)}
-        >
+      <div>
+        <AppBar
+          title="Title"
+        />
 
-        {MARKERS.map(marker =>
-          <MyGreatPlace key={marker.id} onTouchTap={() => this.onTapMarker(marker.id)} lat={marker.lat} lng={marker.lng} text={marker.text} />
-        )}
+        <div className={`container`}>
+          <GoogleMap
+            options={MAP_OPTIONS}
+            bootstrapURLKeys={URL_KEYS}
+            defaultCenter={this.props.center}
+            defaultZoom={this.props.zoom}
+            onChange={this.onChange.bind(this)}
+          >
 
-        </GoogleMap>
+          {MARKERS.map(marker =>
+            <MyGreatPlace key={marker.id} onTouchTap={() => this.onTapMarker(marker.id)} lat={marker.lat} lng={marker.lng} text={marker.text} />
+          )}
+          </GoogleMap>
+        </div>
+
+        <Paper style={style} zDepth={0}>
+          {this.state.tappedId}
+        </Paper>
       </div>
     )
   }
