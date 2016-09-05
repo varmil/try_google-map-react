@@ -9,11 +9,26 @@ const URL_KEYS = {
   key: env.GMAP_API_KEY
 }
 
+const MARKERS = [
+  {
+    id: 1,
+    text: 'AA',
+    lat: 59.955413,
+    lng: 30.337844,
+  },
+  {
+    id: 2,
+    text: 'BB',
+    lat: 59.724465,
+    lng: 30.080121,
+  }
+]
+
 export default class SimpleMapPage extends Component {
   static defaultProps = {
     center: {lat: 59.938043, lng: 30.337157},
     zoom: 9,
-    greatPlaceCoords: {lat: 59.724465, lng: 30.080121}
+    greatPlaceCoords: {lat: null, lng: null }
   }
 
   // onClick({x, y, lat, lng, event}) {
@@ -23,8 +38,9 @@ export default class SimpleMapPage extends Component {
     console.log(center, bounds)
   }
 
-  // distanceToMouse(data) {
-  // }
+  onTapMarker(id) {
+    console.log('TAPTAP: ', id)
+  }
 
   // Make sure the container element has width and height.
   // The map will try to fill the parent container,
@@ -37,11 +53,12 @@ export default class SimpleMapPage extends Component {
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
           onChange={this.onChange.bind(this)}
-          // distanceToMouse={this.distanceToMouse.bind(this)}
         >
 
-          <MyGreatPlace lat={59.955413} lng={30.337844} text={'A'} /* Kreyser Avrora */ />
-          <MyGreatPlace {...this.props.greatPlaceCoords} text={'B'} /* road circle */ />
+        {MARKERS.map(marker =>
+          <MyGreatPlace key={marker.id} onTouchTap={() => this.onTapMarker(marker.id)} lat={marker.lat} lng={marker.lng} text={marker.text} />
+        )}
+
         </GoogleMap>
       </div>
     )

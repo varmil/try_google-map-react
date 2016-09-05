@@ -27,11 +27,9 @@ export default class MyGreatPlace extends Component {
     text: PropTypes.string
   }
 
-  static defaultProps = {}
-
   render() {
     return (
-       <div style={greatPlaceStyle}>
+       <div onTouchTap={this.props.onTouchTap} style={greatPlaceStyle}>
           {this.props.text}
        </div>
     )
